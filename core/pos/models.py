@@ -54,6 +54,84 @@ class Product(models.Model):
         verbose_name_plural = 'Productos'
         ordering = ['id']
 
+class Entrada(models.Model):
+    no_requisicion = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    fecha_entrada = models.DateField(default=datetime.now)
+    # subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    # iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    cantidad = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    # total_iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+
+    def __str__(self):
+        return self.no_requisicion
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if Company.objects.all().exists():
+            self.company = Company.objects.first()
+        super(Entrada, self).save()
+
+    def get_number(self):
+        return f'{self.id:06d}'
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['number'] = self.get_number()
+        item['no_requicision'] = self.get_number()
+        # item['client'] = self.client.toJSON()
+        # item['subtotal'] = f'{self.subtotal:.2f}'
+        # item['iva'] = f'{self.iva:.2f}'
+        # item['total_iva'] = f'{self.total_iva:.2f}'
+        item['total'] = f'{self.total:.2f}'
+        item['fecha_entrada'] = self.date_joined.strftime('%Y-%m-%d')
+        item['entradainsumo'] = [i.toJSON() for i in self.entradainsumo_set.all()]
+        return item
+
+    def delete(self, using=None, keep_parents=False):
+        for detail in self.entradainsumo_set.filter(product__is_inventoried=True):
+            detail.product.stock += detail.cant
+            detail.product.save()
+        super(Entrada, self).delete()
+
+    def calculate_invoice(self):
+        subtotal = self.entradainsumo_set.all().aggregate(result=Coalesce(Sum(F('price') * F('cant')), 0.00, output_field=FloatField())).get('result')
+        # self.subtotal = subtotal
+        # self.total_iva = self.subtotal * float(self.iva)
+        # self.total = float(self.subtotal) + float(self.total_iva)
+        self.save()
+
+    class Meta:
+        verbose_name = 'Entrada'
+        verbose_name_plural = 'Entradas'
+        ordering = ['id']
+
+
+class EntradaInsumo(models.Model):
+    entrada = models.ForeignKey(Entrada, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    cant = models.IntegerField(default=0)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+
+    def __str__(self):
+        return self.product.name
+
+    def toJSON(self):
+        item = model_to_dict(self, exclude=['entrada'])
+        item['product'] = self.product.toJSON()
+        item['price'] = f'{self.price:.2f}'
+        item['subtotal'] = f'{self.subtotal:.2f}'
+        return item
+
+    class Meta:
+        verbose_name = 'Detalle de Entrada'
+        verbose_name_plural = 'Detalle de Entradas'
+        default_permissions = ()
+        ordering = ['id']
+
+
 
 class Client(models.Model):
     names = models.CharField(max_length=150, verbose_name='Nombres')

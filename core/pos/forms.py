@@ -59,6 +59,33 @@ class ProductForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+class EntradaForm(ModelForm):
+
+    class Meta:
+        model = Entrada
+        fields = '__all__'
+        widgets = {
+            'fecha_entrada': forms.DateInput(format='%Y-%m-%d', attrs={
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'autocomplete': 'off',
+                'class': 'form-control datetimepicker-input',
+                'id': 'fecha_entrada',
+                'data-target': '#fecha_entrada',
+                'data-toggle': 'datetimepicker'
+            }
+                                           ),
+            # 'iva': forms.TextInput(attrs={
+            #     'class': 'form-control',
+            # }),
+            # 'subtotal': forms.TextInput(attrs={
+            #     'readonly': True,
+            #     'class': 'form-control',
+            # }),
+            'total': forms.TextInput(attrs={
+                'readonly': True,
+                'class': 'form-control',
+            })
+        }
 
 
 class ClientForm(ModelForm):
