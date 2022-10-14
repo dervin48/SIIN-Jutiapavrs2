@@ -5,8 +5,8 @@ var tblSearchProducts;
 var sale = {
     details: {
         subtotal: 0.00,
-        iva: 0.00,
-        total: 0.00,
+//        iva: 0.00,
+//        total: 0.00,
         products: []
     },
     getProductsIds: function () {
@@ -14,7 +14,7 @@ var sale = {
     },
     calculateInvoice: function () {
         var subtotal = 0.00;
-        var iva = $('input[name="iva"]').val();
+//        var iva = $('input[name="iva"]').val();
         this.details.products.forEach(function (value, index, array) {
             value.index = index;
             value.cant = parseInt(value.cant);
@@ -23,11 +23,11 @@ var sale = {
         });
 
         this.details.subtotal = subtotal;
-        this.details.iva = this.details.subtotal * iva;
-        this.details.total = this.details.subtotal + this.details.iva;
+//        this.details.iva = this.details.subtotal * iva;
+//        this.details.total = this.details.subtotal + this.details.iva;
 
-        $('input[name="subtotal"]').val(this.details.subtotal.toFixed(2));
-        $('input[name="ivacalc"]').val(this.details.iva.toFixed(2));
+//        $('input[name="subtotal"]').val(this.details.subtotal.toFixed(2));
+//        $('input[name="ivacalc"]').val(this.details.iva.toFixed(2));
         $('input[name="total"]').val(this.details.total.toFixed(2));
     },
     addProduct: function (item) {
@@ -43,7 +43,7 @@ var sale = {
             data: this.details.products,
             columns: [
                 {"data": "id"},
-                {"data": "no_requiscion"},
+                {"data": "no_requisicion"},
                 {"data": "full_name"},
                 {"data": "stock"},
                 {"data": "pvp"},
@@ -75,6 +75,13 @@ var sale = {
                     orderable: false,
                     render: function (data, type, row) {
                         return 'Q' + parseFloat(data).toFixed(2);
+                    }
+                },{
+                    targets: [-6],
+                    class: 'text-center',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return 'R' + parseFloat(data).toFixed(2);
                     }
                 },
                 {
@@ -279,7 +286,7 @@ $(function () {
         .off()
         .on('click', 'a[rel="remove"]', function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
-            alert_action('Notificación', '¿Estas seguro de eliminar el producto de tu detalle?',
+            alert_action('Notificación', '¿Estas seguro de eliminar el  insumo de tu detalle?',
                 function () {
                     sale.details.products.splice(tr.row, 1);
                     tblProducts.row(tr.row).remove().draw();
@@ -294,7 +301,7 @@ $(function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             sale.details.products[tr.row].cant = cant;
             sale.calculateInvoice();
-            $('td:last', tblProducts.row(tr.row).node()).html('$' + sale.details.products[tr.row].subtotal.toFixed(2));
+            $('td:last', tblProducts.row(tr.row).node()).html('Q' + sale.details.products[tr.row].subtotal.toFixed(2));
         });
 
     $('.btnRemoveAll').on('click', function () {
@@ -332,6 +339,7 @@ $(function () {
             },
             columns: [
                 {"data": "full_name"},
+                {"data": "no_requisicion"}
                 {"data": "image"},
                 {"data": "stock"},
                 {"data": "pvp"},
@@ -357,7 +365,7 @@ $(function () {
                     }
                 },
                 {
-                    targets: [-2],
+                    targets: [-2,-5],
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
@@ -402,20 +410,20 @@ $(function () {
         keepOpen: false
     });
 
-    $("input[name='iva']").TouchSpin({
-        min: 0,
-        max: 100,
-        step: 0.01,
-        decimals: 2,
-        boostat: 5,
-        maxboostedstep: 10,
-        postfix: '%'
-    }).on('change', function () {
-        sale.calculateInvoice();
-    }).val(0.12);
-
-    $('#frmSale').on('submit', function (e) {
-        e.preventDefault();
+//    $("input[name='iva']").TouchSpin({
+//        min: 0,
+//        max: 100,
+//        step: 0.01,
+//        decimals: 2,
+//        boostat: 5,
+//        maxboostedstep: 10,
+//        postfix: '%'
+//    }).on('change', function () {
+//        sale.calculateInvoice();
+//    }).val(0.12);
+//
+//    $('#frmSale').on('submit', function (e) {
+//        e.preventDefault();
 
         if (sale.details.products.length === 0) {
             message_error('Debe al menos tener un item en su detalle de venta');

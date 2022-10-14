@@ -221,7 +221,7 @@ class Sale(models.Model):
         item['subtotal'] = f'{self.subtotal:.2f}'
         # item['iva'] = f'{self.iva:.2f}'
         # item['total_iva'] = f'{self.total_iva:.2f}'
-        item['total'] = f'{self.total:.2f}'
+        # item['total'] = f'{self.total:.2f}'
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
         item['saleproduct'] = [i.toJSON() for i in self.saleproduct_set.all()]
         return item

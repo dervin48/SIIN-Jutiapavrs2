@@ -13,7 +13,7 @@ var entrada
             parameters['start_date'] = '';
             parameters['end_date'] = '';
         }
-        tblSale = $('#data').DataTable({
+        tblEntrada = $('#data').DataTable({
             responsive: true,
             // scrollX: true,
             // autoWidth: false,
@@ -49,7 +49,7 @@ var entrada
                     }
                 },
                 {
-                    targets: [-2, -3, -4, -5],
+                    targets: [-2, -3, -4],
                     class: 'text-center',
                     render: function (data, type, row) {
                         return 'Q' + parseFloat(data).toFixed(2);
@@ -180,7 +180,7 @@ $(function () {
                 row.child.hide();
                 tr.removeClass('shown');
             } else {
-                row.child(sale.formatRowHtml(row.data())).show();
+                row.child(entrada.formatRowHtml(row.data())).show();
                 tr.addClass('shown');
             }
         });

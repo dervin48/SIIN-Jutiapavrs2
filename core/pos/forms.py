@@ -151,9 +151,9 @@ class SaleForm(ModelForm):
                 'data-toggle': 'datetimepicker'
             }
                                            ),
-            'iva': forms.TextInput(attrs={
-                'class': 'form-control',
-            }),
+            # 'iva': forms.TextInput(attrs={
+            #     'class': 'form-control',
+            # }),
             'subtotal': forms.TextInput(attrs={
                 'readonly': True,
                 'class': 'form-control',

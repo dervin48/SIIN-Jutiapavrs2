@@ -31,7 +31,7 @@ urlpatterns = [
     path('entrada/add/', EntradaCreateView.as_view(), name='entrada_create'),
     path('entrada/delete/<int:pk>/', EntradaDeleteView.as_view(), name='entrada_delete'),
     path('entrada/update/<int:pk>/', EntradaUpdateView.as_view(), name='entrada_update'),
-    # path('entrada/invoice/pdf/<int:pk>/', Entrada_view(), name='entrada_invoice_pdf'),
+    path('entrada/invoice/pdf/<int:pk>/', EntradaInvoicePdfView.as_view(), name='entrada_invoice_pdf'),
     # sale
     path('sale/', SaleListView.as_view(), name='sale_list'),
     path('sale/add/', SaleCreateView.as_view(), name='sale_create'),

@@ -16,7 +16,7 @@ var entrada = {
         this.details.products.forEach(function (value, index, array) {
             value.index = index;
             value.cantidad = parseInt(value.cant);
-            value.subtotal = value.cantidad + parseFloat(value.pvp);
+            value.subtotal = value.cantidad * parseFloat(value.pvp);
             subtotal += value.subtotal;
         });
 
@@ -41,7 +41,6 @@ var entrada = {
             data: this.details.products,
             columns: [
                 {"data": "id"},
-                {"data": "no_requisicion"},
                 {"data": "full_name"},
                 {"data": "stock"},
                 {"data": "pvp"},
@@ -116,73 +115,73 @@ var entrada = {
     },
 };
 
-$(function () {
-
-    select_client = $('select[name="client"]');
-    select_search_product = $('select[name="search_product"]');
-
-    $('.select2').select2({
-        theme: "bootstrap4",
-        language: 'es'
-    });
+//$(function () {
+////
+////    select_client = $('select[name="client"]');
+//    select_search_product = $('select[name="search_product"]');
+//
+//    $('.select2').select2({
+//        theme: "bootstrap4",
+//        language: 'es'
+//    });
 
     // Client
 
-    select_client.select2({
-        theme: "bootstrap4",
-        language: 'es',
-        allowClear: true,
-        ajax: {
-            delay: 250,
-            type: 'POST',
-            url: pathname,
-            headers: {
-                'X-CSRFToken': csrftoken
-            },
+//    select_client.select2({
+//        theme: "bootstrap4",
+//        language: 'es',
+//        allowClear: true,
+//        ajax: {
+//            delay: 250,
+//            type: 'POST',
+//            url: pathname,
+//            headers: {
+//                'X-CSRFToken': csrftoken
+//            },
 //            data: function (params) {
 //                return {
 //                    term: params.term,
 //                    action: 'search_client'
 //                };
 //            },
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            },
-        },
-        placeholder: 'Ingrese una descripción',
-        minimumInputLength: 1,
-    });
+//            processResults: function (data) {
+//                return {
+//                    results: data
+//                };
+//            },
+//        },
+//        placeholder: 'Ingrese una descripción',
+//        minimumInputLength: 1,
+//    });
+//
+//    $('.btnAddClient').on('click', function () {
+//        $('#myModalClient').modal('show');
+//    });
+//
+//    $('#myModalClient').on('hidden.bs.modal', function (e) {
+//        $('#frmClient').trigger('reset');
+//    });
+//
+//    $('input[name="birthdate"]').datetimepicker({
+//        useCurrent: false,
+//        format: 'YYYY-MM-DD',
+//        locale: 'es',
+//        keepOpen: false,
+//        maxDate: new Date()
+//    });
 
-    $('.btnAddClient').on('click', function () {
-        $('#myModalClient').modal('show');
-    });
-
-    $('#myModalClient').on('hidden.bs.modal', function (e) {
-        $('#frmClient').trigger('reset');
-    });
-
-    $('input[name="birthdate"]').datetimepicker({
-        useCurrent: false,
-        format: 'YYYY-MM-DD',
-        locale: 'es',
-        keepOpen: false,
-        maxDate: new Date()
-    });
-
-    $('#frmClient').on('submit', function (e) {
-        e.preventDefault();
-        var parameters = new FormData(this);
-        parameters.append('action', 'create_client');
-        submit_with_ajax(pathname, 'Notificación',
-            '¿Estas seguro de crear al siguiente cliente?', parameters, function (response) {
-                //console.log(response);
-                var newOption = new Option(response.full_name, response.id, false, true);
-                select_client.append(newOption).trigger('change');
-                $('#myModalClient').modal('hide');
-            });
-    });
+//    $('#frmClient').on('submit', function (e) {
+//        e.preventDefault();
+//        var parameters = new FormData(this);
+//        parameters.append('action', 'create_client');
+//        submit_with_ajax(pathname, 'Notificación',
+//            '¿Estas seguro de crear al siguiente cliente?', parameters, function (response) {
+//                //console.log(response);
+//                var newOption = new Option(response.full_name, response.id, false, true);
+//                select_client.append(newOption).trigger('change');
+//                $('#myModalClient').modal('hide');
+//            });
+//    });
 
     // Products
     /*select_search_product.autocomplete({
@@ -287,9 +286,9 @@ $(function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             alert_action('Notificación', '¿Estas seguro de eliminar el producto de tu detalle?',
                 function () {
-                    sale.details.products.splice(tr.row, 1);
+                    entrada.details.products.splice(tr.row, 1);
                     tblProducts.row(tr.row).remove().draw();
-                    sale.calculateInvoice();
+                    entrada.calculateInvoice();
                 }, function () {
 
                 });
@@ -298,16 +297,16 @@ $(function () {
             console.clear();
             var cant = parseInt($(this).val());
             var tr = tblProducts.cell($(this).closest('td, li')).index();
-            sale.details.products[tr.row].cant = cant;
-            sale.calculateInvoice();
+            entrada.details.products[tr.row].cant = cant;
+            entrada.calculateInvoice();
             $('td:last', tblProducts.row(tr.row).node()).html('$' + entrada.details.products[tr.row].subtotal.toFixed(2));
         });
 
     $('.btnRemoveAll').on('click', function () {
-        if (sale.details.products.length === 0) return false;
+        if (entrada.details.products.length === 0) return false;
         alert_action('Notificación', '¿Estas seguro de eliminar todos los details de tu detalle?', function () {
-            sale.details.products = [];
-            sale.listProducts();
+            entrada.details.products = [];
+            entrada.listProducts();
         }, function () {
 
         });
@@ -332,10 +331,10 @@ $(function () {
                     'term': select_search_product.val()
                 },
                 dataSrc: "",
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-            },
+//                headers: {
+//                    'X-CSRFToken': csrftoken
+//                },
+//            },
             columns: [
                 {"data": "full_name"},
                 {"data": "image"},
@@ -367,7 +366,7 @@ $(function () {
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
-                        return '$' + parseFloat(data).toFixed(2);
+                        return 'Q' + parseFloat(data).toFixed(2);
                     }
                 },
                 {
@@ -400,7 +399,7 @@ $(function () {
 
     // Form Sale
 
-    $('#date_joined').datetimepicker({
+    $('#fecha_solicitud').datetimepicker({
         format: 'YYYY-MM-DD',
         useCurrent: false,
         locale: 'es',
@@ -408,39 +407,39 @@ $(function () {
         keepOpen: false
     });
 
-    $("input[name='iva']").TouchSpin({
-        min: 0,
-        max: 100,
-        step: 0.01,
-        decimals: 2,
-        boostat: 5,
-        maxboostedstep: 10,
-        postfix: '%'
-    }).on('change', function () {
-        sale.calculateInvoice();
-    }).val(0.12);
+//    $("input[name='iva']").TouchSpin({
+//        min: 0,
+//        max: 100,
+//        step: 0.01,
+//        decimals: 2,
+//        boostat: 5,
+//        maxboostedstep: 10,
+//        postfix: '%'
+//    }).on('change', function () {
+//        entrada.calculateInvoice();
+//    }).val(0.12);
 
     $('#frmEntrada').on('submit', function (e) {
         e.preventDefault();
 
-        if (sale.details.products.length === 0) {
+        if (entrada.details.products.length === 0) {
             message_error('Debe al menos tener un item en su detalle de entrada');
             return false;
         }
 
-        var success_url = this.getAttribute('data-url');
-        var parameters = new FormData(this);
-        parameters.append('products', JSON.stringify(sale.details.products));
-        submit_with_ajax(pathname, 'Notificación',
-            '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
-                alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function () {
-                    window.open('/pos/sale/invoice/pdf/' + response.id + '/', '_blank');
-                    location.href = success_url;
-                }, function () {
-                    location.href = success_url;
-                });
-            });
-    });
+//        var success_url = this.getAttribute('data-url');
+//        var parameters = new FormData(this);
+//        parameters.append('products', JSON.stringify(sale.details.products));
+//        submit_with_ajax(pathname, 'Notificación',
+//            '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+//                alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function () {
+//                    window.open('/pos/entrada/invoice/pdf/' + response.id + '/', '_blank');
+//                    location.href = success_url;
+//                }, function () {
+//                    location.href = success_url;
+//                });
+//            });
+//    });
 
     entrada.listProducts();
 });

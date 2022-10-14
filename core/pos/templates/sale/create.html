@@ -42,7 +42,7 @@
                                 <div class="card-body">
                                     <div class="container-fluid">
                                         <div class="form-group">
-                                            <label>Buscador de productos:</label>
+                                            <label>Buscador de Insumos:</label>
                                             <div class="input-group">
                                                 <select class="form-control select2" name="search_product"></select>
                                                 {#                                        <input type="text" class="form-control" autocomplete="off"#}
@@ -88,17 +88,21 @@
                         <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title"><b><i class="fas fa-shopping-cart"></i> Datos de la factura</b></h3>
+                                    <h3 class="card-title"><b><i class="fas fa-shopping-cart"></i> Datos de la Requisicion</b></h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="container-fluid">
                                         <input type="hidden" name="action" value="{{ action }}">
                                         <div class="form-group">
-                                            <label>Fecha de venta:</label>
+                                            <label>Fecha de Solicitud:</label>
                                             {{ form.date_joined }}
                                         </div>
                                         <div class="form-group">
-                                            <label>Cliente:</label>
+                                            <label>No Requisicion:</label>
+                                            {{ form.no_requisicion }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Solicitante:</label>
                                             <div class="input-group">
                                                 {{ form.client }}
                                                 <div class="input-group-append">
@@ -109,21 +113,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Subtotal:</label>
+                                            <label>Total:</label>
                                             {{ form.subtotal }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label>IVA:</label>
-                                            {{ form.iva }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label>IVA Calculado:</label>
-                                            <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Total a pagar:</label>
-                                            {{ form.total }}
-                                        </div>
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label>IVA:</label>-->
+<!--                                            {{ form.iva }}-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label>IVA Calculado:</label>-->
+<!--                                            <input type="text" class="form-control" readonly name="ivacalc" value="0.00">-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label>Total a pagar:</label>-->
+<!--                                            {{ form.total }}-->
+<!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +182,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
-                        <b><i class="fas fa-search"></i> Búsqueda de Productos</b>
+                        <b><i class="fas fa-search"></i> Búsqueda de Insumos</b>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>

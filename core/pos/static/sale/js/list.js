@@ -29,12 +29,13 @@ var sale = {
             },
             columns: [
                 {"data": "number"},
+                {"data": "no_requisicion"},
                 {"data": "client.full_name"},
                 {"data": "date_joined"},
                 {"data": "subtotal"},
-                {"data": "iva"},
-                {"data": "total_iva"},
-                {"data": "total"},
+//                {"data": "iva"},
+//                {"data": "total_iva"},
+//                {"data": "total"},
                 {"data": "id"},
             ],
             order: [[0, "desc"], [2, "desc"]],
@@ -85,6 +86,7 @@ var sale = {
             html += '<tr>'
             html += '<td>' + value.product.name + '</td>'
             html += '<td>' + value.product.category.name + '</td>'
+            html += '<td>' + value.no_requisicion + '</td>'
             html += '<td>' + value.price + '</td>'
             html += '<td>' + value.cant + '</td>'
             html += '<td>' + value.subtotal + '</td>'
@@ -143,6 +145,7 @@ $(function () {
                 },
                 columns: [
                     {"data": "product.name"},
+                    {"data": "no_requisicion"},
                     {"data": "product.category.name"},
                     {"data": "price"},
                     {"data": "cant"},
@@ -150,7 +153,7 @@ $(function () {
                 ],
                 columnDefs: [
                     {
-                        targets: [-1, -3],
+                        targets: [-1, -3,-4,-5],
                         class: 'text-center',
                         render: function (data, type, row) {
                             return 'Q' + parseFloat(data).toFixed(2);
